@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/themes/theme_provider.dart';
+import 'package:jarvis/Providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -10,6 +10,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
         title: Center(
           child: Text(
@@ -27,7 +28,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.tertiary,
                 borderRadius: BorderRadius.circular(25)),
             margin: const EdgeInsets.only(left: 25, top: 10, right: 25),
             padding: const EdgeInsets.all(25),

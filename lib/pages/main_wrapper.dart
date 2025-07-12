@@ -14,7 +14,7 @@ class MainWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final navProvider = Provider.of<NavigationProvider>(context);
 
-    final pages = const [
+    const pages = [
       Homepage(),
       SelectATopicPage(),
       PickACharacterPage(),
@@ -24,34 +24,34 @@ class MainWrapper extends StatelessWidget {
     return Scaffold(
       body: pages[navProvider.currnetIndex],
       bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          child: GNav(
-            gap: 8,
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            tabBackgroundColor: Theme.of(context).colorScheme.tertiary,
-            selectedIndex: navProvider.currnetIndex,
-            activeColor: Theme.of(context).colorScheme.inversePrimary,
-            onTabChange: (index) => navProvider.setIndex(index),
-            tabs: const [
-              GButton(
-                icon: Icons.home_outlined,
-                text: "Home",
-              ),
-              GButton(
-                icon: Icons.topic_outlined,
-                text: "Topics",
-              ),
-              GButton(
-                icon: Icons.people_alt_outlined,
-                text: "AIs",
-              ),
-              GButton(
-                icon: Icons.settings,
-                text: "Settings",
-              ),
-            ],
-          ),
+        child: GNav(
+          duration: const Duration(microseconds: 900),
+          curve: Curves.bounceOut,
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          gap: 8,
+          backgroundColor: const Color(0xFF19191F).withValues(alpha: 0.9),
+          tabBackgroundColor: Theme.of(context).colorScheme.surface,
+          selectedIndex: navProvider.currnetIndex,
+          activeColor: Theme.of(context).colorScheme.inversePrimary,
+          onTabChange: (index) => navProvider.setIndex(index),
+          tabs: const [
+            GButton(
+              icon: Icons.home_outlined,
+              text: "Home",
+            ),
+            GButton(
+              icon: Icons.topic_outlined,
+              text: "Topics",
+            ),
+            GButton(
+              icon: Icons.people_alt_outlined,
+              text: "Talk to AIs",
+            ),
+            GButton(
+              icon: Icons.settings,
+              text: "Settings",
+            ),
+          ],
         ),
       ),
     );

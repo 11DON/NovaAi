@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:jarvis/Providers/chat_provider.dart';
 import 'package:jarvis/Providers/navigation_provider.dart';
 import 'package:jarvis/components/my_button.dart';
+import 'package:jarvis/components/session_tile.dart';
+import 'package:jarvis/pages/chat_page.dart';
 import 'package:jarvis/pages/pick_a_character_page.dart';
 import 'package:provider/provider.dart';
+import 'package:jarvis/utils/util.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -12,11 +17,32 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  void _deleteMostRecentChat() {
+    final chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    final sessions = chatProvider.getAllSessionsData();
+
+    if (sessions.isNotEmpty) {
+      final mostrRecentSessionKey = sessions.first['key'];
+      chatProvider.deleteSession(mostrRecentSessionKey);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Most recent chat was deleted"),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No chats to delete")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: Colors.black,
         title: const Center(
           child: Text(
@@ -26,127 +52,204 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              child: Stack(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 70),
-                    padding: const EdgeInsets.fromLTRB(15, 55, 0, 5),
-                    height: 150,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      image: const DecorationImage(
-                        image: AssetImage('images/Selection.JPG'),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Container(
-                      height: 150,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.6),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.1),
-                            Colors.black.withOpacity(0.1),
-                            Colors.black.withOpacity(1),
-                          ],
-                          stops: const [0.0, 0.4, 0.7, 1.0],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(35, 50, 0, 0),
-                    height: 150,
-                    width: double.infinity,
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(
+                bottom: 20), // Add bottom padding to avoid clipping
+            child: Column(
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    child: Stack(
                       children: [
-                        Text(
-                          "Your Intelligent",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Poppins",
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 70),
+                          padding: const EdgeInsets.fromLTRB(15, 40, 0, 5),
+                          height: 150,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            image: const DecorationImage(
+                              image: AssetImage('images/Selection.jpg'),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                        Text(
-                          "Companion Awaits",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Poppins",
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
+                        Container(
+                          height: 150,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withOpacity(0.1),
+                                Colors.black.withOpacity(0.1),
+                                Colors.black.withOpacity(1),
+                              ],
+                              stops: const [0.0, 0.4, 0.7, 1.0],
+                            ),
+                          ),
                         ),
-                        Text(
-                          "Connect with AI for personalized conversations.",
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontFamily: "Roboto-Regular",
-                              fontSize: 14),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(25, 30, 0, 0),
+                          height: 150,
+                          width: double.infinity,
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Your Intelligent",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Poppins",
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "Companion Awaits",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Poppins",
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                textAlign: TextAlign.center,
+                                "Connect with AI for personalized conversations.",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: "Roboto-Regular",
+                                    fontSize: 14),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          MyButton(
-              onTap: () =>
-                  Provider.of<NavigationProvider>(context, listen: false)
-                      .setIndex(1),
-              color: const Color(0xFFC4005F),
-              height: 110,
-              icon: const Icon(
-                Icons.broadcast_on_personal_outlined,
-                color: Colors.white,
-              ),
-              title: 'Talk to AI Assistant',
-              width: double.infinity),
-          MyButton(
-              onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const PickACharacterPage(),
+                  ),
+                ),
+                MyButton(
+                  onTap: () =>
+                      Provider.of<NavigationProvider>(context, listen: false)
+                          .setIndex(1),
+                  color: const Color(0xFFC4005F),
+                  height: 110,
+                  icon: const Icon(Icons.broadcast_on_personal_outlined,
+                      color: Colors.white),
+                  title: 'Talk to AI Assistant',
+                  width: double.infinity,
+                ),
+                MyButton(
+                  onTap: () =>
+                      Provider.of<NavigationProvider>(context, listen: false)
+                          .setIndex(2),
+                  color: const Color(0xFFC4005F),
+                  height: 110,
+                  icon: const Icon(Icons.broadcast_on_personal_outlined,
+                      color: Colors.white),
+                  title: 'Talk to a Character',
+                  width: double.infinity,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Recent Chats",
+                          style: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                borderRadius: BorderRadius.circular(12)),
+                            child: TextButton.icon(
+                              onPressed: _deleteMostRecentChat,
+                              icon: const Icon(Icons.delete_forever,
+                                  color: Colors.red),
+                              label: Text(
+                                "Delete Chat",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-              color: const Color(0xFFC4005F),
-              height: 110,
-              icon: const Icon(
-                Icons.people_alt_outlined,
-                color: Colors.white,
-              ),
-              title: 'Talk to a Character',
-              width: double.infinity),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Recent Chats",
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    fontSize: 20,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold),
-              ),
+                ),
+
+/*
+
+
+                // RECENT CHATS
+
+
+
+*/
+                Consumer<ChatProvider>(
+                  builder: (context, chatProvider, child) {
+                    final sessions = chatProvider.getAllSessionsData();
+
+                    if (sessions.isEmpty) {
+                      return const Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text("No Chats to show yet"),
+                      );
+                    }
+                    return ListView.separated(
+                      itemCount: sessions.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (_, __) => const SizedBox(
+                        height: 10,
+                      ),
+                      itemBuilder: (context, index) {
+                        final session = sessions[index];
+                        final title = session['title'];
+                        final lastMessage = session['lastMessage'];
+                        final time = formatTimestamp(session['timestamp']);
+                        final avatarPath = session['avatar'];
+
+                        return SessionTile(
+                          session: session,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  sessionKey: session['key'],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
