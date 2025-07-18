@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:jarvis/Providers/chat_provider.dart';
+import 'package:jarvis/Providers/topic_provider.dart';
 import 'package:jarvis/components/chat_bubble.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +23,7 @@ class _ChatPageState extends State<ChatPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+            duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
       }
     });
   }
@@ -40,32 +43,52 @@ class _ChatPageState extends State<ChatPage> {
       child: Scaffold(
         appBar: AppBar(
           scrolledUnderElevation: 0,
-          title: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 90),
-                  child: Text("${widget.sessionKey.split('_').first}"),
-                ),
-                Consumer<ChatProvider>(
-                  builder: (context, chatProvider, child) {
-                    final latestSession =
-                        chatProvider.getAllSessionsData().firstOrNull;
-                    final avatarPath = latestSession != null
-                        ? latestSession['avatar']
-                        : 'images/default_avatar.png';
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: CircleAvatar(
-                        backgroundImage: AssetImage(avatarPath),
+          title: Center(child: Consumer2<ChatProvider, TopicProvider>(
+            builder: (context, chatProvider, topicProvider, child) {
+              final isTopic = widget.sessionKey.startsWith('topic||');
+
+              if (isTopic) {
+                final topic = topicProvider.selectedTopic;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (topic?.icon != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 70),
+                        child: Text(topic?.title ?? 'Topic'),
                       ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Icon(
+                        topic!.icon,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                final name =
+                    widget.sessionKey.split('||')[1].replaceAll('-', ' ');
+                final avatarPath = chatProvider.getAvatarForName(name);
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 95),
+                      child: Text(name),
+                    ),
+                    CircleAvatar(
+                      backgroundImage:
+                          avatarPath != null && File(avatarPath).existsSync()
+                              ? FileImage(File(avatarPath))
+                              : AssetImage(avatarPath),
+                    ),
+                  ],
+                );
+              }
+            },
+          )),
         ),
         body: Column(
           children: [
@@ -87,9 +110,12 @@ class _ChatPageState extends State<ChatPage> {
                       final message = chatProvider.messages[index];
                       final avatar = message.iUser
                           ? null
-                          : chatProvider.getAvatarForName(
-                              chatProvider.currentSessionKey?.split('_')[0] ??
-                                  '');
+                          : chatProvider.getAvatarForName(chatProvider
+                                  .currentSessionKey
+                                  ?.split('||')[1]
+                                  .replaceAll('-', ' ') ??
+                              '');
+
                       // return message
                       return ChatBubble(
                         message: message,
@@ -139,10 +165,11 @@ class _ChatPageState extends State<ChatPage> {
 
                   // Icon Button
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_controller.text.isNotEmpty) {
                           final chatProvider = context.read<ChatProvider>();
-                          chatProvider.sendMesage(context, _controller.text);
+                          await chatProvider.sendMesage(
+                              context, _controller.text);
                           _controller.clear();
                           _scrollToBottom();
                         }

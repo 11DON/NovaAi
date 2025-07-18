@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/Providers/chat_provider.dart';
+import 'package:jarvis/Providers/persona_provider.dart';
 import 'package:jarvis/Providers/topic_provider.dart';
 import 'package:jarvis/components/my_topic_tab.dart';
 import 'package:jarvis/components/own_topic.dart';
@@ -93,8 +95,17 @@ class SelectATopicPage extends StatelessWidget {
                     title: topic.title,
                     describtion: topic.systemPrompt,
                     onTap: () {
-                      Provider.of<TopicProvider>(context, listen: false)
-                          .setTopic(topic);
+                      final personaProvider =
+                          Provider.of<PersonaProvider>(context, listen: false);
+                      final topicProvider =
+                          Provider.of<TopicProvider>(context, listen: false);
+                      Provider.of<ChatProvider>(context, listen: false);
+                      final chatProvider =
+                          Provider.of<ChatProvider>(context, listen: false);
+                      chatProvider.startTopicSession(topic);
+
+                      personaProvider.clearPersona();
+                      topicProvider.setTopic(topic);
 
                       Navigator.push(
                         context,

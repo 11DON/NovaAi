@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:jarvis/Providers/chat_provider.dart';
 import 'package:jarvis/Providers/persona_provider.dart';
@@ -5,7 +7,9 @@ import 'package:jarvis/components/create_character_tab.dart';
 import 'package:jarvis/components/my_third_button.dart';
 import 'package:jarvis/models/persona.dart';
 import 'package:jarvis/pages/chat_page.dart';
+import 'package:jarvis/pages/create_character_page.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PickACharacterPage extends StatefulWidget {
   const PickACharacterPage({super.key});
@@ -15,6 +19,8 @@ class PickACharacterPage extends StatefulWidget {
 }
 
 class _PickACharacterPageState extends State<PickACharacterPage> {
+  File? _pickedImage;
+  final ImagePicker _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
     final PersonProvider = Provider.of<PersonaProvider>(context);
@@ -33,12 +39,20 @@ class _PickACharacterPageState extends State<PickACharacterPage> {
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                 sliver: SliverToBoxAdapter(
                   child: MyThirdButton(
-                      color: Theme.of(context).colorScheme.primary,
-                      height: 60,
-                      icon: const Icon(Icons.add_circle_outline),
-                      title: "Create New Character",
-                      width: 200,
-                      onTap: () => {}),
+                    color: Theme.of(context).colorScheme.primary,
+                    height: 60,
+                    icon: const Icon(Icons.add_circle_outline),
+                    title: "Create New Character",
+                    width: 200,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CreateCharacterPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               SliverPadding(
@@ -55,10 +69,10 @@ class _PickACharacterPageState extends State<PickACharacterPage> {
                         personaProvider.setPersona(character);
                         final chatProvider =
                             Provider.of<ChatProvider>(context, listen: false);
-                        final lastSessionKey = chatProvider
-                            .getAllSessionsKeys()
-                            .lastWhere((key) => key.startsWith(character.name),
-                                orElse: () => '');
+                        final sessionPrefix =
+                            'persona||${character.name.replaceAll(' ', '-')}';
+                        final lastSessionKey =
+                            chatProvider.getLastSessionFor(sessionPrefix) ?? '';
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -84,13 +98,18 @@ class _PickACharacterPageState extends State<PickACharacterPage> {
                               TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    final newSessionKey =
-                                        "${character.name}_${DateTime.now().microsecondsSinceEpoch}";
+                                    final chatProvider =
+                                        Provider.of<ChatProvider>(context,
+                                            listen: false);
+                                    chatProvider.createNewSession(
+                                        character.name,
+                                        isTopic: false);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            ChatPage(sessionKey: newSessionKey),
+                                        builder: (context) => ChatPage(
+                                            sessionKey: chatProvider
+                                                .currentSessionKey!),
                                       ),
                                     );
                                   },
@@ -99,10 +118,10 @@ class _PickACharacterPageState extends State<PickACharacterPage> {
                           ),
                         );
                       },
-                      describtion: character.role,
+                      role: character.name,
+                      describtion: character.systemPrompt,
                       title: character.name,
                       img: character.avatar,
-                      role: character.role,
                     );
                   }, childCount: characters.length),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

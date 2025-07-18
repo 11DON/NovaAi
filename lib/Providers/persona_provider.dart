@@ -55,6 +55,11 @@ class PersonaProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addPersona(Persona persona) {
+    characters.add(persona);
+    notifyListeners();
+  }
+
   void clearPersona() {
     _selectedPersona = null;
     notifyListeners();

@@ -9,6 +9,7 @@ import 'package:jarvis/pages/main_wrapper.dart';
 import 'package:jarvis/Providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize Hive
@@ -17,7 +18,7 @@ void main() async {
   // Open box for chat sessions
 
   await Hive.openBox<List<Message>>('chat_history');
-
+  Hive.deleteBoxFromDisk('chat_history');
   runApp(
     MultiProvider(
       providers: [
@@ -32,17 +33,17 @@ void main() async {
         // Topic Provider
         ChangeNotifierProvider(create: (context) => TopicProvider()),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/models/message.dart';
 
 class AiServices with ChangeNotifier {
   static const String _apiKey =

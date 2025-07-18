@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:jarvis/Providers/chat_provider.dart';
 import 'package:jarvis/Providers/navigation_provider.dart';
+import 'package:jarvis/Providers/persona_provider.dart';
+import 'package:jarvis/Providers/topic_provider.dart';
 import 'package:jarvis/components/my_button.dart';
 import 'package:jarvis/components/session_tile.dart';
 import 'package:jarvis/pages/chat_page.dart';
-import 'package:jarvis/pages/pick_a_character_page.dart';
 import 'package:provider/provider.dart';
-import 'package:jarvis/utils/util.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -192,6 +192,26 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                         ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: TextButton.icon(
+                            onPressed: () {
+                              Hive.deleteBoxFromDisk('chat_history');
+                            },
+                            icon: const Icon(Icons.delete_forever,
+                                color: Colors.red),
+                            label: Text(
+                              "",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -205,8 +225,8 @@ class _HomepageState extends State<Homepage> {
 
 
 */
-                Consumer<ChatProvider>(
-                  builder: (context, chatProvider, child) {
+                Consumer2<ChatProvider, TopicProvider>(
+                  builder: (context, chatProvider, topicProvider, child) {
                     final sessions = chatProvider.getAllSessionsData();
 
                     if (sessions.isEmpty) {
@@ -224,11 +244,6 @@ class _HomepageState extends State<Homepage> {
                       ),
                       itemBuilder: (context, index) {
                         final session = sessions[index];
-                        final title = session['title'];
-                        final lastMessage = session['lastMessage'];
-                        final time = formatTimestamp(session['timestamp']);
-                        final avatarPath = session['avatar'];
-
                         return SessionTile(
                           session: session,
                           onTap: () {

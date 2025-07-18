@@ -9,4 +9,10 @@ class Persona {
       required this.role,
       required this.systemPrompt,
       required this.avatar});
+
+  String get sessionKey {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final cleanTitle = name.trim().replaceAll(' ', '-');
+    return 'persona||$cleanTitle||$timestamp';
+  }
 }

@@ -13,5 +13,9 @@ class Topic {
     this.icon,
   });
 
-  String get sessionKey => "topic_${title.toLowerCase().replaceAll(' ', '_')}";
+  String get sessionKey {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final cleanTitle = title.trim().replaceAll(' ', '-');
+    return 'topic||$cleanTitle||$timestamp';
+  }
 }

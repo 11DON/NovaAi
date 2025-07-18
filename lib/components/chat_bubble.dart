@@ -19,7 +19,7 @@ class ChatBubble extends StatelessWidget {
           children: [
             if (!isUser && avatar != null)
               Padding(
-                padding: EdgeInsets.only(right: 8),
+                padding: const EdgeInsets.only(right: 8),
                 child: CircleAvatar(
                   backgroundImage: AssetImage(avatar!),
                 ),
@@ -28,17 +28,19 @@ class ChatBubble extends StatelessWidget {
             // chatBubble
             Flexible(
               child: Container(
-                padding: EdgeInsets.all(12),
-                margin: EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                   color: isUser
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.secondary,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                    bottomLeft: isUser ? Radius.circular(16) : Radius.zero,
-                    bottomRight: isUser ? Radius.circular(16) : Radius.zero,
+                    topLeft: const Radius.circular(16),
+                    topRight: const Radius.circular(16),
+                    bottomLeft:
+                        isUser ? const Radius.circular(16) : Radius.zero,
+                    bottomRight:
+                        isUser ? const Radius.circular(16) : Radius.zero,
                   ),
                 ),
                 child: Text(

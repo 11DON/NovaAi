@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/Providers/persona_provider.dart';
+import 'package:jarvis/Providers/topic_provider.dart';
+import 'package:jarvis/models/topic.dart';
+import 'package:jarvis/pages/chat_page.dart';
+import 'package:provider/provider.dart';
 
 class OwnTopic extends StatefulWidget {
   const OwnTopic({super.key});
@@ -8,6 +13,7 @@ class OwnTopic extends StatefulWidget {
 }
 
 class _OwnTopicState extends State<OwnTopic> {
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,6 +32,7 @@ class _OwnTopicState extends State<OwnTopic> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: TextField(
+                controller: _controller,
                 decoration: InputDecoration(
                     hintText: 'Type your own unique topic...',
                     hintStyle: TextStyle(
@@ -53,6 +60,30 @@ class _OwnTopicState extends State<OwnTopic> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GestureDetector(
+                onTap: () {
+                  final text = _controller.text.trim();
+                  if (text.isEmpty) return;
+                  final topicProvider =
+                      Provider.of<TopicProvider>(context, listen: false);
+
+                  final personaProvider =
+                      Provider.of<PersonaProvider>(context, listen: false);
+
+                  personaProvider.clearPersona();
+                  final customTopic = Topic(
+                      title: text,
+                      systemPrompt: text,
+                      avatar: 'images/default_avatar.jpg');
+                  topicProvider.setTopic(customTopic);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ChatPage(sessionKey: customTopic.sessionKey),
+                    ),
+                  );
+                },
                 child: Container(
                   decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary),
