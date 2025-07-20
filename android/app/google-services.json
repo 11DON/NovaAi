@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "830635583110",
+    "project_id": "novaai-ad1cd",
+    "storage_bucket": "novaai-ad1cd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830635583110:android:5b792624e9cf0c665fd307",
+        "android_client_info": {
+          "package_name": "com.example.nova_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnafSB7VeQmvnvr1y9ZlzoXqjQE699SGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
