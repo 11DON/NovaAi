@@ -44,11 +44,11 @@ flutter run
 
 | Continue or Start | Recent Chats | Topic Chats |
 |-------------------|--------------|-------------|
-| <img width="189" height="427" alt="Image" src="https://github.com/user-attachments/assets/83096efe-bdd1-4871-9018-4fc473d45830" /> | !<img width="186" height="354" alt="Image" src="https://github.com/user-attachments/assets/335aeec4-7cb6-4532-aac8-0adbb67a2809" />|<img width="186" height="429" alt="Image" src="https://github.com/user-attachments/assets/1b8ddef1-72d4-464e-a66d-d94bacdd9c9c" /> |
+| <img width="189" height="427" alt="Image" src="https://github.com/user-attachments/assets/83096efe-bdd1-4871-9018-4fc473d45830" /> | !<img width="186" height="354" alt="Image" src="https://github.com/user-attachments/assets/335aeec4-7cb6-4532-aac8-0adbb67a2809" />|<img width="190" height="432" alt="Image" src="https://github.com/user-attachments/assets/34566d8d-2afd-4620-bab3-101f4b2ea297" /> |
 
 | Character Chats |
 |------------------|
-| <img width="190" height="432" alt="Image" src="https://github.com/user-attachments/assets/5e1259df-abcf-4dcb-a475-ad0eac9e4cc6" /> |  |  |
+| <img width="190" height="428" alt="Image" src="https://github.com/user-attachments/assets/e2844a4d-84ae-47f3-8ac7-f604253ad2db" /> |  |  |
 
 
 ### 🤔 Future Enhancements
