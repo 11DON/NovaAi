@@ -40,8 +40,7 @@ flutter run
 
 | Home Page | Topics Page | Settings Page |
 |-----------|-------------|----------------|
-| ![Home](https://github.com/user-attachments/assets/7bacefce-a0f1-4e90-82ef-f67cc3393a6b)
-![Home](assets/home.png)| ![Topics](https://github.com/user-attachments/assets/f99345be-ccbf-47d0-bc91-f9128d6e7bd2) | ![Settings](https://github.com/user-attachments/assets/1cefe2c3-63e3-4904-8e7e-2605e51dc430) |
+| ![Home](https://github.com/user-attachments/assets/7bacefce-a0f1-4e90-82ef-f67cc3393a6b)| ![Topics](https://github.com/user-attachments/assets/f99345be-ccbf-47d0-bc91-f9128d6e7bd2) | ![Settings](https://github.com/user-attachments/assets/1cefe2c3-63e3-4904-8e7e-2605e51dc430) | 
 
 | Continue or Start | Recent Chats | Topic Chats |
 |-------------------|--------------|-------------|
