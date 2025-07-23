@@ -44,7 +44,7 @@ flutter run
 
 | Continue or Start | Recent Chats | Topic Chats |
 |-------------------|--------------|-------------|
-| <img width="189" height="427" alt="Image" src="https://github.com/user-attachments/assets/83096efe-bdd1-4871-9018-4fc473d45830" /> | !<img width="186" height="354" alt="Image" src="https://github.com/user-attachments/assets/335aeec4-7cb6-4532-aac8-0adbb67a2809" />|<img width="190" height="432" alt="Image" src="https://github.com/user-attachments/assets/34566d8d-2afd-4620-bab3-101f4b2ea297" /> |
+| <img width="189" height="427" alt="Image" src="https://github.com/user-attachments/assets/83096efe-bdd1-4871-9018-4fc473d45830" /> | <img width="186" height="354" alt="Image" src="https://github.com/user-attachments/assets/335aeec4-7cb6-4532-aac8-0adbb67a2809" />|<img width="190" height="432" alt="Image" src="https://github.com/user-attachments/assets/34566d8d-2afd-4620-bab3-101f4b2ea297" /> |
 
 | Character Chats |
 |------------------|
