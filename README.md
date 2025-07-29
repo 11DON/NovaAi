@@ -1,6 +1,6 @@
 ## 🤖 NovaAI – AI Chat Assistant Flutter App
 
-Jarvies is a powerful AI-powered Flutter application that provides a personalized chat experience with custom avatars and intelligent responses. The app allows users to create characters with unique personalities, upload custom images, and have dynamic, smart conversations powered by advanced AI technologies.
+NovaAI is a powerful AI-powered Flutter application that provides a personalized chat experience with custom avatars and intelligent responses. The app allows users to create characters with unique personalities, upload custom images, and have dynamic, smart conversations powered by advanced AI technologies.
 
 ## 🚀 Getting Started
 
